@@ -99,7 +99,7 @@ function SignUpPage() {
                         Already have an account?{' '}
                     </span>
 
-                    <Link to="/signin" className="text-purple-400 hover:text-purple-300">
+                    <Link to="/" className="text-purple-400 hover:text-purple-300">
                         Sign in here
                     </Link>
                 </p>

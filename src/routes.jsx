@@ -1,6 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
-import Home from './home';
 import SignUp from './authentication/signupPage';
 import SignIn from './authentication/signinPage';
 import Dashboard from './portal/dashboard';
@@ -10,7 +9,7 @@ function RoutesConfig() {
         <>
             <Router>
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<Navigate to="/signin" />} />
                     <Route path="/signup" element={<SignUp/>}/>
                     <Route path="/signin" element={<SignIn/>}/>
                     <Route path="/dashboard" element={<Dashboard/>}/>
