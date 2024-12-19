@@ -90,22 +90,19 @@ app.post('/api/nonce', async (req, res) => {
 
 // Login Route
 app.post('/api/login', async (req, res) => {
-    const { signedMessage, nonce, aadharNumber } = req.body;
-
-    // Find user by Aadhar number
-    const existingUser = await User.findOne({ aadharNumber });
-    if (!existingUser) {
-        return res.status(400).json({ error: 'User not registered with this Aadhar number' });
-    }
-
-    // Verify the signed message with the nonce
+    console.log(req.body);
+    const { signedMessage, nonce, address } = req.body;
     const recoveredAddress = ethers.utils.verifyMessage(nonce, signedMessage);
-    if (recoveredAddress !== existingUser.blockchainAddress) {
-        return res.status(401).json({ error: 'Invalid signature' });
+    console.log(recoveredAddress);
+    if (recoveredAddress !== address) {
+      return res.status(401).json({ error: 'Invalid signature' });
     }
-
-    // Generate JWT token with the Aadhar number as the payload
-    const token = jwt.sign({ aadharNumber: existingUser.aadharNumber }, secretKey, { expiresIn: '25s' });
+  
+    // Generate the JWT token
+    const token = jwt.sign({ address }, secretKey, { expiresIn: '25s' });
+    console.log(token);
+  
+    // Send the JWT token to the frontend
     res.status(200).json({ token });
 });
 
