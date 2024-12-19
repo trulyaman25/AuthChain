@@ -22,7 +22,7 @@ function SignInPage() {
     }
 
     return (
-        <div className="min-h-screen bg-black flex items-center justify-center px-4">
+        <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
             <div className="bg-gray-900 bg-opacity-80 p-8 rounded-lg shadow-2xl w-full max-w-md border border-gray-800 backdrop-blur-sm">
                 <h2 className="text-3xl font-bold mb-6 text-white text-center">Sign In</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
