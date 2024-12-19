@@ -4,22 +4,49 @@ import { Link } from 'react-router-dom'
 function SignUpPage() {
     const [formData, setFormData] = useState({
         name: '',
-        aadhar: ''
+        aadharNumber: ''
     })
+    
+    const [message, setMessage] = useState('')
 
     const handleChange = (e) => {
         const { name, value } = e.target
         setFormData(prevState => ({
-        ...prevState,
-        [name]: value
+            ...prevState,
+            [name]: value
         }))
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log('Form submitted:', formData)
-        setFormData({ name: '', aadhar: '' })
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+    
+        // Aadhar validation (ensure it's 12 digits)
+        if (formData.aadharNumber.length !== 12) {
+            setMessage('Please enter a valid 12-digit Aadhar number.')
+            return
+        }
+    
+        // Sending data to the server running on localhost:5000
+        const response = await fetch('http://localhost:5000/api/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData), // Send the whole formData object
+        })
+    
+        const data = await response.json()
+    
+        if (response.ok) {
+            setMessage('Sign up successful!') // Show success message
+        } else {
+            setMessage('Sign up failed. Please try again.') // Show error message
+        }
+    
+        console.log(data)
+        setFormData({ name: '', aadharNumber: '' }) // Clear the form data after submit
     }
+    
 
     return (
         <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
@@ -41,12 +68,12 @@ function SignUpPage() {
                     </div>
 
                     <div>
-                        <label htmlFor="aadhar" className="block text-sm font-medium text-gray-300 mb-1"> Aadhar Number </label>
+                        <label htmlFor="aadharNumber" className="block text-sm font-medium text-gray-300 mb-1"> Aadhar Number </label>
                         <input
                             type="text"
-                            id="aadhar"
-                            name="aadhar"
-                            value={formData.aadhar}
+                            id="aadharNumber"
+                            name="aadharNumber"
+                            value={formData.aadharNumber}
                             onChange={handleChange}
                             required
                             className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-200"
@@ -60,7 +87,13 @@ function SignUpPage() {
                         Sign Up
                     </button>
                 </form>
-                
+
+                {message && (
+                    <p className="mt-4 text-center text-sm text-gray-400">
+                        {message}
+                    </p>
+                )}
+
                 <p className="mt-4 text-center text-sm text-gray-400">
                     <span>
                         Already have an account?{' '}
